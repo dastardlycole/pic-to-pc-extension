@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+
+  <!-- Background -->
+  <rect width="128" height="128" rx="20" fill="#2563eb"/>
+
+  <!-- Phone body -->
+  <rect x="10" y="35" width="30" height="56" rx="5" fill="white"/>
+
+  <!-- Camera ring + lens -->
+  <circle cx="25" cy="42" r="4.5" fill="#bfdbfe"/>
+  <circle cx="25" cy="42" r="2.5" fill="#1e40af"/>
+  <circle cx="23.8" cy="40.8" r="1" fill="rgba(255,255,255,0.55)"/>
+
+  <!-- Phone screen -->
+  <rect x="14" y="49" width="22" height="32" rx="2" fill="#bfdbfe"/>
+
+  <!-- Home bar -->
+  <rect x="20" y="85" width="10" height="2.5" rx="1.25" fill="#bfdbfe"/>
+
+  <!-- Arrow shaft + head -->
+  <line x1="48" y1="64" x2="74" y2="64" stroke="white" stroke-width="5" stroke-linecap="round"/>
+  <polyline points="67,55 77,64 67,73" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Monitor bezel -->
+  <rect x="82" y="24" width="38" height="54" rx="4" fill="white"/>
+
+  <!-- Monitor screen -->
+  <rect x="86" y="28" width="30" height="42" rx="2" fill="#bfdbfe"/>
+
+  <!-- Stand neck -->
+  <rect x="97" y="78" width="6" height="9" fill="white"/>
+
+  <!-- Stand base -->
+  <rect x="88" y="87" width="24" height="4" rx="2" fill="white"/>
+
+</svg>
