@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="280">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background (fully opaque — no alpha) -->
+  <rect width="440" height="280" fill="url(#bg)"/>
+
+  <!-- Subtle glow behind graphic -->
+  <circle cx="220" cy="96" r="112" fill="#3b82f6" opacity="0.18"/>
+
+  <!-- ═══ Graphic: 1.5× icon, centered at x≈220, y-offset=10 ═══ -->
+
+  <!-- Phone body -->
+  <rect x="145" y="62" width="45" height="84" rx="8" fill="white"/>
+  <!-- Camera -->
+  <circle cx="167" cy="73" r="7"   fill="#bfdbfe"/>
+  <circle cx="167" cy="73" r="4"   fill="#1e40af"/>
+  <circle cx="164" cy="70" r="1.5" fill="rgba(255,255,255,0.6)"/>
+  <!-- Screen -->
+  <rect x="151" y="83" width="33" height="48" rx="3" fill="#bfdbfe"/>
+  <!-- Home bar -->
+  <rect x="160" y="137" width="15" height="4" rx="2" fill="#bfdbfe"/>
+
+  <!-- Arrow -->
+  <line x1="202" y1="106" x2="231" y2="106" stroke="white" stroke-width="7" stroke-linecap="round"/>
+  <polyline points="224,94 244,106 224,118" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Monitor bezel -->
+  <rect x="253" y="46" width="57" height="81" rx="6" fill="white"/>
+  <!-- Monitor screen -->
+  <rect x="259" y="52" width="45" height="63" rx="3" fill="#bfdbfe"/>
+  <!-- Stand neck -->
+  <rect x="276" y="127" width="9" height="14" fill="white"/>
+  <!-- Stand base -->
+  <rect x="262" y="141" width="36" height="6" rx="3" fill="white"/>
+
+  <!-- ═══ Text ═══ -->
+
+  <!-- "Pic to PC" -->
+  <text x="220" y="188"
+        font-family="sans-serif" font-weight="bold" font-size="42"
+        fill="white" text-anchor="middle">Pic to PC</text>
+
+  <!-- Tagline (2 lines so it never overflows) -->
+  <text x="220" y="218"
+        font-family="sans-serif" font-size="14"
+        fill="#93c5fd" text-anchor="middle">Transfer phone photos to any</text>
+  <text x="220" y="238"
+        font-family="sans-serif" font-size="14"
+        fill="#93c5fd" text-anchor="middle">browser upload field — instantly.</text>
+
+  <!-- Feature tag -->
+  <text x="220" y="264"
+        font-family="sans-serif" font-size="12"
+        fill="#60a5fa" text-anchor="middle">No app  ·  No account  ·  No cloud</text>
+</svg>
