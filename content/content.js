@@ -218,7 +218,7 @@
           // WebSocket connected — join room, then wait for 'joined' before creating offer
           port.postMessage({
             type: 'send',
-            payload: { data: JSON.stringify({ type: 'join', roomId }) },
+            payload: { data: JSON.stringify({ type: 'join', roomId, role: 'desktop', caps: ['any-file', 'text'] }) },
           });
           break;
 
