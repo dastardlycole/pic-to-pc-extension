@@ -111,10 +111,10 @@
   }
 
   function closeSession() {
-    session?.dc?.close();
-    session?.pc?.close();
-    session?.port?.postMessage({ type: 'close' });
-    session?.port?.disconnect();
+    try { session?.dc?.close(); } catch (_) {}
+    try { session?.pc?.close(); } catch (_) {}
+    try { session?.port?.postMessage({ type: 'close' }); } catch (_) {}
+    try { session?.port?.disconnect(); } catch (_) {}
     removeModal();
     removeToast();
     session = null;
@@ -241,6 +241,12 @@
       }
     });
 
+    port.onDisconnect.addListener(() => {
+      // Service worker was terminated (MV3 ~30s idle timeout).
+      // closeSession() is safe to call — try-catches guard the dead port.
+      setModalStatus('Connection lost — click ✕ to close and try again.');
+    });
+
     port.postMessage({ type: 'open', payload: { url: SIGNALING_WS } });
   }
 
@@ -249,7 +255,7 @@
 
     if (msg.type === 'answer') {
       await session.pc.setRemoteDescription(new RTCSessionDescription(msg.payload));
-      setModalStatus('Connected — select photos on your phone');
+      setModalStatus('Connected — select files or send text on your phone');
     }
 
     if (msg.type === 'ice-candidate' && msg.payload?.candidate) {
@@ -306,7 +312,7 @@
 
   function setupDataChannel(dc) {
     dc.addEventListener('open', () => {
-      setModalStatus('Connected — select photos on your phone');
+      setModalStatus('Connected — select files or send text on your phone');
     });
 
     dc.addEventListener('message', ({ data }) => {
@@ -348,6 +354,11 @@
       return;
     }
 
+    if (msg.type === 'text-message') {
+      handleTextMessage(msg.text);
+      return;
+    }
+
     if (msg.type === 'transfer-complete') {
       onTransferComplete();
     }
@@ -369,11 +380,11 @@
 
     if (session.mode === MODE_FILE_UPLOAD) {
       const count = files.length;
-      setModalStatus(`Done! ${count} photo${count !== 1 ? 's' : ''} added.`);
-      injectIntoInput(files, session.targetInput);
+      setModalStatus(`Done! ${count} file${count !== 1 ? 's' : ''} received.`);
+      dispatchFilesForUploadMode(files, session.targetInput);
       setTimeout(closeSession, 1500);
     } else {
-      // Input mode: close modal, start clipboard queue
+      // Input mode: close modal, route by file type
       removeModal();
       const savedSession = session;
       session = null; // release session so closeSession doesn't run twice
@@ -381,8 +392,93 @@
       savedSession.pc?.close();
       savedSession.port?.postMessage({ type: 'close' });
       savedSession.port?.disconnect();
-      startClipboardQueue(files);
+      routeFilesForInputMode(files);
     }
+  }
+
+  function dispatchFilesForUploadMode(files, targetInput) {
+    const inputAccept = (targetInput?.accept || '').toLowerCase();
+    const toInject   = [];
+    const toDownload = [];
+
+    for (const file of files) {
+      const mime     = (file.type || '').toLowerCase();
+      const isImage  = mime.startsWith('image/');
+      const isVideo  = mime.startsWith('video/');
+
+      if (isImage) {
+        toInject.push(file);
+      } else if (isVideo) {
+        const inputTakesVideo = inputAccept === '' || inputAccept.includes('video') || inputAccept.includes('*/*');
+        if (inputTakesVideo) toInject.push(file); else toDownload.push(file);
+      } else {
+        const inputTakesFile = inputAccept === '' || inputAccept.includes('*/*') || inputAccept.includes(mime);
+        if (inputTakesFile) toInject.push(file); else toDownload.push(file);
+      }
+    }
+
+    if (toInject.length)   injectIntoInput(toInject, targetInput);
+    toDownload.forEach(downloadFile);
+  }
+
+  function routeFilesForInputMode(files) {
+    const images = files.filter(f => (f.type || '').startsWith('image/'));
+    const others = files.filter(f => !(f.type || '').startsWith('image/'));
+
+    if (images.length && others.length) {
+      // Mixed: start clipboard queue for images, then show download prompts for others after
+      startClipboardQueue(images, () => showDownloadQueue(others));
+    } else if (images.length) {
+      startClipboardQueue(images);
+    } else {
+      showDownloadQueue(others);
+    }
+  }
+
+  function showDownloadQueue(files) {
+    let index = 0;
+
+    function next() {
+      if (index >= files.length) {
+        showToast('All files downloaded ✓', []);
+        setTimeout(removeToast, 2500);
+        return;
+      }
+
+      const file   = files[index];
+      const isLast = index === files.length - 1;
+      const label  = `${file.name} ready`;
+      const buttons = [
+        { label: '⬇ Download', onClick: () => { downloadFile(file); index++; next(); } },
+      ];
+      if (!isLast) {
+        buttons.push({ label: 'Skip →', onClick: () => { index++; next(); } });
+      }
+
+      showToast(label, buttons);
+    }
+
+    next();
+  }
+
+  async function handleTextMessage(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (e) {
+      console.warn('[pic-to-pc] clipboard.writeText failed:', e);
+    }
+
+    // Tear down the session
+    removeModal();
+    const savedSession = session;
+    session = null;
+    savedSession?.dc?.close();
+    savedSession?.pc?.close();
+    savedSession?.port?.postMessage({ type: 'close' });
+    savedSession?.port?.disconnect();
+
+    showToast('Text copied — press Ctrl+V to paste', []);
+    setTimeout(removeToast, 4000);
   }
 
   // ══════════════════════════════════════════════════════════════════════════
@@ -426,30 +522,45 @@
   // INPUT MODE — clipboard queue + toast
   // ══════════════════════════════════════════════════════════════════════════
 
-  async function startClipboardQueue(files) {
+  async function startClipboardQueue(files, onDone) {
     let index = 0;
 
     async function advance() {
       if (index >= files.length) {
-        showToast('All photos sent ✓', null, null);
+        if (onDone) { onDone(); return; }
+        showToast('All files sent ✓', []);
         setTimeout(removeToast, 2500);
         return;
       }
 
-      const file    = files[index];
-      const isLast  = index === files.length - 1;
-      const label   = `Photo ${index + 1} of ${files.length} ready — Press Ctrl+V to paste`;
-      const btnText = isLast ? null : 'Next →';
+      const file   = files[index];
+      const isLast = index === files.length - 1;
+      const label  = `File ${index + 1} of ${files.length} ready — Press Ctrl+V to paste`;
 
       await writeToClipboard(file);
 
-      showToast(label, btnText, async () => {
-        index++;
-        await advance();
-      });
+      const buttons = [
+        { label: '⬇ Save', secondary: true, onClick: () => downloadFile(file) },
+      ];
+      if (!isLast) {
+        buttons.push({ label: 'Next →', onClick: async () => { index++; await advance(); } });
+      }
+
+      showToast(label, buttons);
     }
 
     await advance();
+  }
+
+  function downloadFile(file) {
+    const url = URL.createObjectURL(file);
+    const a   = document.createElement('a');
+    a.href     = url;
+    a.download = file.name || 'photo.jpg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   // Convert any image to PNG blob (clipboard only accepts image/png in Chrome)
@@ -485,7 +596,7 @@
   // TOAST UI (input mode)
   // ══════════════════════════════════════════════════════════════════════════
 
-  function showToast(message, btnLabel, onBtn) {
+  function showToast(message, buttons = []) {
     let toast = document.getElementById('p2p-toast');
     if (!toast) {
       toast = document.createElement('div');
@@ -495,12 +606,14 @@
 
     toast.innerHTML = `
       <span class="p2p-toast-msg">${escHtml(message)}</span>
-      ${btnLabel ? `<button class="p2p-toast-btn">${escHtml(btnLabel)}</button>` : ''}
+      ${buttons.map((b, i) =>
+        `<button class="p2p-toast-btn${b.secondary ? ' p2p-toast-btn-secondary' : ''}" data-i="${i}">${escHtml(b.label)}</button>`
+      ).join('')}
     `;
 
-    if (btnLabel && onBtn) {
-      toast.querySelector('.p2p-toast-btn').addEventListener('click', onBtn);
-    }
+    buttons.forEach((b, i) => {
+      toast.querySelector(`[data-i="${i}"]`)?.addEventListener('click', b.onClick);
+    });
   }
 
   function removeToast() {

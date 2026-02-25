@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Pic to PC",
-  "version": "1.0.0",
-  "description": "Transfer photos from your phone directly into any file upload field — no app, no account, no cloud.",
+  "version": "1.1.0",
+  "description": "Transfer photos from your phone into any file upload, paste anywhere, or save to PC — no app, no account, no cloud.",
 
   "permissions": ["clipboardWrite"],
   "host_permissions": ["<all_urls>"],

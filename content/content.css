@@ -241,3 +241,11 @@
 .p2p-toast-btn:hover {
   background: #1d4ed8;
 }
+
+.p2p-toast-btn-secondary {
+  background: #334155;
+}
+
+.p2p-toast-btn-secondary:hover {
+  background: #475569;
+}
