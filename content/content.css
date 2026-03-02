@@ -6,29 +6,34 @@
   all: unset;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  margin-left: 8px;
-  padding: 5px 10px;
-  background: #2563eb;
-  color: #fff;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
+  gap: 4px;
+  margin-left: 6px;
+  padding: 3px 10px;
+  background: #c0c0c0;
+  color: #000000;
+  font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: normal;
   line-height: 1;
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
   white-space: nowrap;
   vertical-align: middle;
-  transition: background 0.15s;
+  min-height: 23px;
   box-sizing: border-box;
-}
-
-.p2p-trigger-btn:hover {
-  background: #1d4ed8;
+  box-shadow:
+    inset -1px -1px #0a0a0a,
+    inset  1px  1px #ffffff,
+    inset -2px -2px #808080,
+    inset  2px  2px #dfdfdf;
 }
 
 .p2p-trigger-btn:active {
-  background: #1e40af;
+  box-shadow:
+    inset -1px -1px #ffffff,
+    inset  1px  1px #0a0a0a,
+    inset -2px -2px #dfdfdf,
+    inset  2px  2px #808080;
 }
 
 /* ─── Modal overlay ──────────────────────────────────────────────────────────── */
@@ -36,12 +41,12 @@
   all: initial;
   position: fixed !important;
   inset: 0 !important;
-  z-index: 2147483647 !important; /* max z-index */
+  z-index: 2147483647 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  background: rgba(0, 0, 0, 0.55) !important;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif !important;
   box-sizing: border-box !important;
 }
 
@@ -50,57 +55,72 @@
   all: initial;
   display: flex;
   flex-direction: column;
-  width: 320px;
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.35);
-  overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  width: 300px;
+  background: #c0c0c0;
+  font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
   box-sizing: border-box;
-  animation: p2p-slide-up 0.2s ease;
+  border-radius: 0;
+  box-shadow:
+    inset -1px -1px #0a0a0a,
+    inset  1px  1px #ffffff,
+    inset -2px -2px #808080,
+    inset  2px  2px #dfdfdf,
+    4px 4px 0 rgba(0, 0, 0, 0.4);
+  animation: p2p-slide-up 0.15s ease;
 }
 
 @keyframes p2p-slide-up {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── Header ─────────────────────────────────────────────────────────────────── */
+/* ─── Header / title bar ─────────────────────────────────────────────────────── */
 #p2p-overlay .p2p-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  background: #2563eb;
+  padding: 3px 4px;
+  background: linear-gradient(to right, #000080, #1084d0);
   color: #fff;
   box-sizing: border-box;
 }
 
 #p2p-overlay .p2p-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: #fff;
-  letter-spacing: -0.2px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #ffffff;
+  letter-spacing: 0;
+  font-family: 'Tahoma', Arial, sans-serif;
 }
 
 #p2p-overlay .p2p-close-btn {
   all: unset;
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  color: rgba(255,255,255,0.8);
-  font-size: 16px;
+  background: #c0c0c0;
+  color: #000000;
+  font-size: 9px;
+  font-weight: bold;
+  font-family: 'Tahoma', Arial, sans-serif;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  border-radius: 0;
   box-sizing: border-box;
+  box-shadow:
+    inset -1px -1px #0a0a0a,
+    inset  1px  1px #ffffff,
+    inset -2px -2px #808080,
+    inset  2px  2px #dfdfdf;
 }
 
-#p2p-overlay .p2p-close-btn:hover {
-  background: rgba(255,255,255,0.2);
-  color: #fff;
+#p2p-overlay .p2p-close-btn:active {
+  box-shadow:
+    inset -1px -1px #ffffff,
+    inset  1px  1px #0a0a0a,
+    inset -2px -2px #dfdfdf,
+    inset  2px  2px #808080;
 }
 
 /* ─── Body ───────────────────────────────────────────────────────────────────── */
@@ -108,23 +128,25 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 20px 20px;
-  gap: 12px;
+  padding: 12px;
+  gap: 8px;
   box-sizing: border-box;
 }
 
 #p2p-overlay .p2p-status {
-  font-size: 14px;
-  font-weight: 600;
-  color: #111827;
+  font-size: 11px;
+  font-weight: bold;
+  color: #000000;
   text-align: center;
-  min-height: 20px;
+  min-height: 16px;
+  font-family: 'Tahoma', Arial, sans-serif;
 }
 
 #p2p-overlay .p2p-hint {
-  font-size: 12px;
-  color: #6b7280;
+  font-size: 10px;
+  color: #444444;
   text-align: center;
+  font-family: 'Tahoma', Arial, sans-serif;
 }
 
 /* ─── QR container ───────────────────────────────────────────────────────────── */
@@ -133,19 +155,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 216px;
-  min-height: 216px;
-  padding: 8px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  width: 200px;
+  min-height: 200px;
+  padding: 6px;
+  background: #ffffff;
+  border-radius: 0;
   box-sizing: border-box;
+  box-shadow:
+    inset  1px  1px #0a0a0a,
+    inset -1px -1px #ffffff,
+    inset  2px  2px #808080,
+    inset -2px -2px #dfdfdf;
 }
 
 #p2p-overlay .p2p-qr canvas,
 #p2p-overlay .p2p-qr img {
   display: block;
-  border-radius: 4px;
+  border-radius: 0;
 }
 
 /* ─── File progress list ──────────────────────────────────────────────────────── */
@@ -153,7 +179,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   box-sizing: border-box;
 }
 
@@ -164,93 +190,129 @@
 
 #p2p-overlay .p2p-file-name {
   display: block;
-  font-size: 11px;
-  color: #374151;
+  font-size: 10px;
+  color: #000000;
   margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 280px;
+  max-width: 260px;
+  font-family: 'Tahoma', Arial, sans-serif;
 }
 
 #p2p-overlay .p2p-bar-wrap {
   width: 100%;
-  height: 6px;
-  background: #e5e7eb;
-  border-radius: 99px;
+  height: 16px;
+  background: #ffffff;
+  border-radius: 0;
   overflow: hidden;
   box-sizing: border-box;
+  box-shadow:
+    inset  1px  1px #808080,
+    inset -1px -1px #ffffff,
+    inset  2px  2px #404040,
+    inset -2px -2px #dfdfdf;
 }
 
 #p2p-overlay .p2p-bar {
   height: 100%;
   width: 0%;
-  background: #2563eb;
-  border-radius: 99px;
+  border-radius: 0;
   transition: width 0.1s linear;
   box-sizing: border-box;
+  background-color: #000080;
+  background-image: repeating-linear-gradient(
+    to right,
+    #000080 0px,
+    #000080 10px,
+    #c0c0c0 10px,
+    #c0c0c0 12px
+  );
 }
 
 #p2p-overlay .p2p-bar.p2p-bar-done {
-  background: #16a34a;
+  background-color: #008000;
+  background-image: repeating-linear-gradient(
+    to right,
+    #008000 0px,
+    #008000 10px,
+    #c0c0c0 10px,
+    #c0c0c0 12px
+  );
 }
 
-/* ─── Input mode toast ───────────────────────────────────────────────────────── */
+/* ─── Toast ───────────────────────────────────────────────────────────────────── */
 #p2p-toast {
   all: initial;
   position: fixed !important;
-  bottom: 24px !important;
-  right: 24px !important;
+  bottom: 16px !important;
+  right: 16px !important;
   z-index: 2147483647 !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 10px !important;
-  padding: 14px 18px !important;
-  background: #1e293b !important;
-  color: #f8fafc !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.35) !important;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
-  font-size: 13px !important;
-  width: 320px !important;
+  gap: 8px !important;
+  padding: 10px !important;
+  background: #c0c0c0 !important;
+  color: #000000 !important;
+  font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif !important;
+  font-size: 11px !important;
+  width: 300px !important;
   box-sizing: border-box !important;
-  animation: p2p-slide-up 0.2s ease !important;
+  border-radius: 0 !important;
+  animation: p2p-slide-up 0.15s ease !important;
+  box-shadow:
+    inset -1px -1px #0a0a0a,
+    inset  1px  1px #ffffff,
+    inset -2px -2px #808080,
+    inset  2px  2px #dfdfdf,
+    4px 4px 0 rgba(0, 0, 0, 0.4) !important;
 }
 
 .p2p-toast-msg {
   line-height: 1.4;
-  color: #f8fafc;
+  color: #000000;
+  font-size: 11px;
+  font-family: 'Tahoma', Arial, sans-serif;
 }
 
 .p2p-toast-actions {
   display: flex;
-  gap: 8px;
+  gap: 4px;
 }
 
 .p2p-toast-btn {
   all: unset;
   flex: 1;
-  padding: 7px 14px;
-  background: #2563eb;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  border-radius: 8px;
+  padding: 4px 10px;
+  background: #c0c0c0;
+  color: #000000;
+  font-size: 11px;
+  font-weight: normal;
+  font-family: 'Tahoma', Arial, sans-serif;
+  border-radius: 0;
   cursor: pointer;
   white-space: nowrap;
   text-align: center;
-  transition: background 0.15s;
+  min-height: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
+  box-shadow:
+    inset -1px -1px #0a0a0a,
+    inset  1px  1px #ffffff,
+    inset -2px -2px #808080,
+    inset  2px  2px #dfdfdf;
 }
 
-.p2p-toast-btn:hover {
-  background: #1d4ed8;
+.p2p-toast-btn:active {
+  box-shadow:
+    inset -1px -1px #ffffff,
+    inset  1px  1px #0a0a0a,
+    inset -2px -2px #dfdfdf,
+    inset  2px  2px #808080;
 }
 
 .p2p-toast-btn-secondary {
-  background: #334155;
-}
-
-.p2p-toast-btn-secondary:hover {
-  background: #475569;
+  color: #444444;
 }
