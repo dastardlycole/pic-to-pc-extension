@@ -203,8 +203,8 @@
   right: 24px !important;
   z-index: 2147483647 !important;
   display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
+  flex-direction: column !important;
+  gap: 10px !important;
   padding: 14px 18px !important;
   background: #1e293b !important;
   color: #f8fafc !important;
@@ -212,21 +212,25 @@
   box-shadow: 0 8px 32px rgba(0,0,0,0.35) !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
   font-size: 13px !important;
-  max-width: 380px !important;
+  width: 320px !important;
   box-sizing: border-box !important;
   animation: p2p-slide-up 0.2s ease !important;
 }
 
 .p2p-toast-msg {
-  flex: 1;
   line-height: 1.4;
   color: #f8fafc;
 }
 
+.p2p-toast-actions {
+  display: flex;
+  gap: 8px;
+}
+
 .p2p-toast-btn {
   all: unset;
-  flex-shrink: 0;
-  padding: 6px 14px;
+  flex: 1;
+  padding: 7px 14px;
   background: #2563eb;
   color: #fff;
   font-size: 13px;
@@ -234,6 +238,7 @@
   border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
+  text-align: center;
   transition: background 0.15s;
   box-sizing: border-box;
 }

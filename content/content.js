@@ -636,9 +636,9 @@
 
     toast.innerHTML = `
       <span class="p2p-toast-msg">${escHtml(message)}</span>
-      ${buttons.map((b, i) =>
+      ${buttons.length ? `<div class="p2p-toast-actions">${buttons.map((b, i) =>
         `<button class="p2p-toast-btn${b.secondary ? ' p2p-toast-btn-secondary' : ''}" data-i="${i}">${escHtml(b.label)}</button>`
-      ).join('')}
+      ).join('')}</div>` : ''}
     `;
 
     buttons.forEach((b, i) => {
