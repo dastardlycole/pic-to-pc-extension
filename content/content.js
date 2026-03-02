@@ -104,6 +104,7 @@
       currentMeta:     null,
       currentChunks:   [],
       currentReceived: 0,
+      swKeepAlive:     null,
     };
 
     showModal();
@@ -111,6 +112,7 @@
   }
 
   function closeSession() {
+    clearInterval(session?.swKeepAlive);
     try { session?.dc?.close(); } catch (_) {}
     try { session?.pc?.close(); } catch (_) {}
     try { session?.port?.postMessage({ type: 'close' }); } catch (_) {}
@@ -211,6 +213,13 @@
   function openSignaling(roomId) {
     const port = chrome.runtime.connect({ name: 'p2p-signal' });
     session.port = port;
+
+    // Ping the service worker every 20 s to prevent Chrome killing it.
+    // MV3 workers are terminated after 30 s of inactivity — if the worker dies
+    // during signalling, peer-left and ICE messages never reach the content script.
+    session.swKeepAlive = setInterval(() => {
+      try { port.postMessage({ type: 'keepalive' }); } catch (_) {}
+    }, 20000);
 
     port.onMessage.addListener(async ({ type, data }) => {
       switch (type) {
