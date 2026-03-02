@@ -251,6 +251,11 @@
   }
 
   async function handleSignalingMessage(msg) {
+    if (msg.type === 'peer-left') {
+      await handleMobileLeft();
+      return;
+    }
+
     if (!session?.pc) return;
 
     if (msg.type === 'answer') {
@@ -261,6 +266,18 @@
     if (msg.type === 'ice-candidate' && msg.payload?.candidate) {
       await session.pc.addIceCandidate(new RTCIceCandidate(msg.payload)).catch(() => {});
     }
+  }
+
+  // Mobile closed its tab — tear down the dead connection and make a fresh offer
+  // so that rescanning the same QR code works immediately.
+  async function handleMobileLeft() {
+    if (!session) return;
+    setModalStatus('Phone disconnected — scan the QR code to reconnect');
+    try { session.dc?.close(); } catch (_) {}
+    try { session.pc?.close(); } catch (_) {}
+    session.dc = null;
+    session.pc = null;
+    await createOffer(session.roomId);
   }
 
   // ══════════════════════════════════════════════════════════════════════════
