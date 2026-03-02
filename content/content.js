@@ -343,7 +343,11 @@
     });
 
     dc.addEventListener('error', (e) => {
-      setModalStatus('Transfer error: ' + (e.error?.message ?? 'unknown'));
+      const msg = e.error?.message ?? 'unknown';
+      // 'User-Initiated Abort, reason=Close called' just means the remote peer
+      // closed the connection — not a real error. The peer-left handler deals with it.
+      if (/abort|close called/i.test(msg)) return;
+      setModalStatus('Transfer error: ' + msg);
     });
   }
 
