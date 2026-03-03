@@ -133,15 +133,17 @@
     overlayEl.id = 'p2p-overlay';
     overlayEl.innerHTML = `
       <div class="p2p-modal">
-        <div class="p2p-header">
-          <span class="p2p-title">📱 Upload from Phone</span>
-          <button class="p2p-close-btn" title="Close">✕</button>
-        </div>
-        <div class="p2p-body">
-          <div class="p2p-status">Connecting to server…</div>
-          <div class="p2p-qr" id="p2p-qr-container"></div>
-          <div class="p2p-hint">Point your camera at the code to open the transfer page</div>
-          <div class="p2p-files" id="p2p-files"></div>
+        <div class="p2p-modal-inner">
+          <div class="p2p-header">
+            <span class="p2p-title">Pic to PC</span>
+            <button class="p2p-close-btn" title="Close">✕</button>
+          </div>
+          <div class="p2p-body">
+            <div class="p2p-status">Connecting to server…</div>
+            <div class="p2p-qr" id="p2p-qr-container"></div>
+            <div class="p2p-hint">Point your camera at the code to open the transfer page</div>
+            <div class="p2p-files" id="p2p-files"></div>
+          </div>
         </div>
       </div>
     `;
